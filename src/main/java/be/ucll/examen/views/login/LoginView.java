@@ -3,23 +3,18 @@ package be.ucll.examen.views.login;
 import be.ucll.examen.security.AuthenticatedUser;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
-import com.vaadin.flow.router.BeforeEnterEvent;
-import com.vaadin.flow.router.BeforeEnterObserver;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
 import com.vaadin.flow.server.VaadinService;
-import com.vaadin.flow.server.auth.AnonymousAllowed;
+import org.springframework.beans.factory.annotation.Autowired;
 
-@AnonymousAllowed
-@PageTitle("Login")
+
+@PageTitle("login")
 @Route(value = "login")
-public class LoginView extends LoginOverlay implements BeforeEnterObserver {
-
-    private final AuthenticatedUser authenticatedUser;
-
-    public LoginView(AuthenticatedUser authenticatedUser) {
-        this.authenticatedUser = authenticatedUser;
+public class LoginView extends LoginOverlay {
+    public LoginView() {
+        setAction("login");
         setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));
 
         LoginI18n i18n = LoginI18n.createDefault();
@@ -33,14 +28,5 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         setOpened(true);
     }
 
-    @Override
-    public void beforeEnter(BeforeEnterEvent event) {
-        if (authenticatedUser.get().isPresent()) {
-            // Already logged in
-            setOpened(false);
-            event.forwardTo("");
-        }
 
-        setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
-    }
 }

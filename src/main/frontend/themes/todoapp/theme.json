@@ -1,9 +1,3 @@
 {
-  "lumoImports" : [ "typography", "color", "spacing", "badge", "utility" ],
-  "assets" : {
-    "@fontsource/barlow-condensed" : {
-      "*.css" : "@fontsource/barlow-condensed",
-      "files/*" : "@fontsource/barlow-condensed/files"
-    }
-  }
+  "lumoImports" : [ "typography", "color", "spacing", "badge", "utility" ]
 }
