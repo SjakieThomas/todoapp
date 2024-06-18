@@ -1,24 +1,18 @@
 package be.ucll.examen.views;
 
-import be.ucll.examen.data.User;
+import be.ucll.examen.entity.User;
 import be.ucll.examen.security.AuthenticatedUser;
+import be.ucll.examen.views.login.LoginView;
 import be.ucll.examen.views.register.RegisterView;
-import be.ucll.examen.views.test.TestView;
 import be.ucll.examen.views.todo.TODOView;
 import com.vaadin.flow.component.Component;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.avatar.Avatar;
 import com.vaadin.flow.component.contextmenu.MenuItem;
-import com.vaadin.flow.component.html.Anchor;
-import com.vaadin.flow.component.html.Div;
-import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.html.Header;
-import com.vaadin.flow.component.html.ListItem;
-import com.vaadin.flow.component.html.Nav;
-import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.html.UnorderedList;
+import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
@@ -39,11 +33,14 @@ import com.vaadin.flow.theme.lumo.LumoUtility.Whitespace;
 import com.vaadin.flow.theme.lumo.LumoUtility.Width;
 import java.io.ByteArrayInputStream;
 import java.util.Optional;
+
+import jakarta.annotation.security.PermitAll;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 /**
  * The main view is a top-level placeholder for other views.
  */
+@PermitAll
 public class MainLayout extends AppLayout {
 
     /**
@@ -84,7 +81,6 @@ public class MainLayout extends AppLayout {
     public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;
-
         addToNavbar(createHeaderContent());
     }
 
@@ -103,7 +99,7 @@ public class MainLayout extends AppLayout {
         if (maybeUser.isPresent()) {
             User user = maybeUser.get();
 
-            Avatar avatar = new Avatar(user.getName());
+            Avatar avatar = new Avatar(user.getLastName());
             StreamResource resource = new StreamResource("profile-pic",
                     () -> new ByteArrayInputStream(user.getProfilePicture()));
             avatar.setImageResource(resource);
@@ -116,7 +112,7 @@ public class MainLayout extends AppLayout {
             MenuItem userName = userMenu.addItem("");
             Div div = new Div();
             div.add(avatar);
-            div.add(user.getName());
+            div.add(user.getLastName());
             div.add(new Icon("lumo", "dropdown"));
             div.getElement().getStyle().set("display", "flex");
             div.getElement().getStyle().set("align-items", "center");
@@ -144,7 +140,6 @@ public class MainLayout extends AppLayout {
             if (accessChecker.hasAccess(menuItem.getView())) {
                 list.add(menuItem);
             }
-
         }
 
         header.add(layout, nav);
@@ -157,9 +152,18 @@ public class MainLayout extends AppLayout {
 
                 new MenuItemInfo("TODO", LineAwesomeIcon.LIST_ALT_SOLID.create(), TODOView.class), //
 
-                new MenuItemInfo("Test", LineAwesomeIcon.FILTER_SOLID.create(), TestView.class), //
+                new MenuItemInfo("login", LineAwesomeIcon.PLUS_SOLID.create(), LoginView.class), //
 
         };
     }
 
+    @Override
+    protected void afterNavigation() {
+        super.afterNavigation();
+     //   viewTitle.setText(getCurrentPageTitle());
+    }
+    private String getCurrentPageTitle() {
+        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
+        return title == null ? "" : title.value();
+    }
 }
