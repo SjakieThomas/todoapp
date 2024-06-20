@@ -5,9 +5,6 @@ import be.ucll.examen.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.Optional;
 
 /**
  * This interface represents a repository for managing User entities.

@@ -7,6 +7,7 @@ import be.ucll.examen.entity.User;
 import be.ucll.examen.repository.TodoRepository;
 import be.ucll.examen.repository.UserRepository;
 import be.ucll.examen.security.AuthenticatedUser;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,16 +22,14 @@ public class TodoService {
 
     @Autowired
     private TodoRepository repository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private AuthenticatedUser authenticatedUser;
 
     public Optional<Todo> get(Long id) {
         return repository.findById(id);
-    }
-
-    public Todo update(Todo entity) {
-        return repository.save(entity);
     }
 
     public void delete(Long id) {
@@ -79,9 +78,34 @@ public class TodoService {
         return repository.findAll(spec, pageRequest);
     }
 
-    public void save(Todo todo) {
+    public Todo save(Todo todo) {
         todo.setUser(getCurrentUser());
         repository.save(todo);
+        return todo;
+    }
+
+
+    public Todo save(Todo todo,Long userId) {
+        userRepository.findById(userId).ifPresent(todo::setUser);
+        repository.save(todo);
+        return todo;
+    }
+
+    public Todo update(Todo updatedTodo) {
+        Optional<Todo> existingTodoOptional = repository.findById(updatedTodo.getId());
+
+        if (existingTodoOptional.isPresent()) {
+            Todo existingTodo = existingTodoOptional.get();
+            Optional.ofNullable(updatedTodo.getTitle()).ifPresent(existingTodo::setTitle);
+            Optional.ofNullable(updatedTodo.getComment()).ifPresent(existingTodo::setComment);
+            Optional.ofNullable(updatedTodo.getCreationDate()).ifPresent(existingTodo::setCreationDate);
+            Optional.ofNullable(updatedTodo.getDueDate()).ifPresent(existingTodo::setDueDate);
+            Optional.ofNullable(updatedTodo.getStatus()).ifPresent(existingTodo::setStatus);
+            Optional.ofNullable(updatedTodo.getTodoFor()).ifPresent(existingTodo::setTodoFor);
+            return repository.save(existingTodo);
+        } else {
+            throw new EntityNotFoundException("Todo not found with id " + updatedTodo.getId());
+        }
     }
 
     private User getCurrentUser() {

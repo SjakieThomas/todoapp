@@ -3,9 +3,7 @@ package be.ucll.examen.security;
 import be.ucll.examen.entity.User;
 import be.ucll.examen.repository.UserRepository;
 import com.vaadin.flow.server.VaadinServletRequest;
-
 import java.util.Optional;
-
 import com.vaadin.flow.server.VaadinServletResponse;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.servlet.http.Cookie;

@@ -1,5 +1,6 @@
 package be.ucll.examen.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -30,6 +31,7 @@ public class Todo extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private TodoFor todoFor;
 
+    @JsonBackReference
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

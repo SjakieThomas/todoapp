@@ -1,9 +1,12 @@
 package be.ucll.examen.entity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -30,6 +33,7 @@ public class User extends AbstractEntity {
     @Column(length = 1000000)
     private byte[] profilePicture;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference //om te voorkomen dat er een oneindig patroon is 418 im a teapot
     private List<Todo> todos = new ArrayList<>();
 
     public User() {}

@@ -1,13 +1,11 @@
 package be.ucll.examen.views.login;
 
-import be.ucll.examen.security.AuthenticatedUser;
 import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.internal.RouteUtil;
 import com.vaadin.flow.server.VaadinService;
-import org.springframework.beans.factory.annotation.Autowired;
 
 
 @PageTitle("login")
