@@ -227,11 +227,12 @@
                     <sources>
                         <source>${project.basedir}/src/main/resources/todos.xsd</source>
                     </sources>
-                    <!-- <packageName>be.ucll.examen.SOAP.models.v1</packageName>
-                    <outputDirectory>src/main/java</outputDirectory>
-                    <clearOutputDir>false</clearOutputDir> -->
+                    <packageName>be.ucll.examen.SOAP.models.v1</packageName>
+                    <outputDirectory>src/main/java/</outputDirectory>
+                    <clearOutputDir>false</clearOutputDir>
+
                 </configuration>
-            </plugin>
+            </plugin><!---->
         </plugins>
     </build>
 

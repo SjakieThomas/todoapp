@@ -20,15 +20,15 @@ public class WebServiceConfig extends WsConfigurerAdapter {
         MessageDispatcherServlet servlet = new MessageDispatcherServlet();
         servlet.setApplicationContext(applicationContext);
         servlet.setTransformWsdlLocations(true);
-        return new ServletRegistrationBean<>(servlet, "/SOAP/*");
+        return new ServletRegistrationBean<>(servlet, "/ws/*");
     }
 
     @Bean(name = "todos")
     public DefaultWsdl11Definition defaultWsdl11Definition(XsdSchema todosSchema) {
         DefaultWsdl11Definition definition = new DefaultWsdl11Definition();
         definition.setPortTypeName("TodosPort");
-        definition.setLocationUri("/SOAP/V1/");
-        definition.setTargetNamespace("http://ucll.be/examen/SOAP");
+        definition.setLocationUri("/ws");
+        definition.setTargetNamespace("http://todos.be/soap/todos");
         definition.setSchema(todosSchema);
         return definition;
     }

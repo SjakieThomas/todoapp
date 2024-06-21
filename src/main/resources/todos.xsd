@@ -2,7 +2,7 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns:tns="http://todos.be/soap/todos"
            targetNamespace="http://todos.be/soap/todos"
-           elementFormDefault="qualified" >
+           elementFormDefault="qualified">
     
     <xs:element name="getTodosRequest">
         <xs:complexType>
@@ -14,13 +14,13 @@
     <xs:element name="getTodosResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="Todo" type="tns:Todo" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="TodoSoap" type="tns:TodoSoap" minOccurs="1" maxOccurs="1"/>
                 <xs:element name= "type" type="tns:STypeProcessOutcome" minOccurs="1" maxOccurs="1"/>
                 <xs:element name= "errormessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:complexType name="Todo">
+    <xs:complexType name="TodoSoap">
         <xs:sequence>
             <xs:element name="title" type="xs:string"/>
             <xs:element name="comment" type="xs:string"/>
@@ -29,7 +29,7 @@
             <xs:element name="todo_status" type="tns:todo_status"/>
             <xs:element name="todo_for" type="tns:todo_for"/>
             <xs:element name="id" type="xs:long"/>
-            <xs:element name="user" type="tns:user"/>
+            <xs:element name="user" type="tns:userSoap"/>
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType name="todo_status">
@@ -47,7 +47,7 @@
             <xs:enumeration value="ANDERE"/>
         </xs:restriction>
     </xs:simpleType>
-    <xs:complexType name="user">
+    <xs:complexType name="userSoap">
         <xs:sequence>
             <xs:element name="username" type="xs:string"/>
             <xs:element name="id" type="xs:long"/>
