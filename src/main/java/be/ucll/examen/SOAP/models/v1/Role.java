@@ -13,33 +13,31 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for todo_status.
+ * <p>Java class for role.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * <pre>
- * &lt;simpleType name="todo_status"&gt;
+ * &lt;simpleType name="role"&gt;
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
- *     &lt;enumeration value="DONE"/&gt;
- *     &lt;enumeration value="IN_PROGRESS"/&gt;
- *     &lt;enumeration value="TODO"/&gt;
+ *     &lt;enumeration value="USER"/&gt;
+ *     &lt;enumeration value="ADMIN"/&gt;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
  * 
  */
-@XmlType(name = "todo_status")
+@XmlType(name = "role")
 @XmlEnum
-public enum TodoStatus {
+public enum Role {
 
-    DONE,
-    IN_PROGRESS,
-    TODO;
+    USER,
+    ADMIN;
 
     public String value() {
         return name();
     }
 
-    public static TodoStatus fromValue(String v) {
+    public static Role fromValue(String v) {
         return valueOf(v);
     }
 

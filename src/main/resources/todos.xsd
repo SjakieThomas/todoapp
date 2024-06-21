@@ -7,29 +7,29 @@
     <xs:element name="getTodosRequest">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="id" type="xs:long" minOccurs="1" maxOccurs="1"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
     <xs:element name="getTodosResponse">
         <xs:complexType>
             <xs:sequence>
-                <xs:element name="TodoSoap" type="tns:TodoSoap" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="Todo" type="tns:Todo" minOccurs="1" maxOccurs="1"/>
                 <xs:element name= "type" type="tns:STypeProcessOutcome" minOccurs="1" maxOccurs="1"/>
                 <xs:element name= "errormessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-    <xs:complexType name="TodoSoap">
+    <xs:complexType name="Todo">
         <xs:sequence>
             <xs:element name="title" type="xs:string"/>
             <xs:element name="comment" type="xs:string"/>
-            <xs:element name="creation_date" type="xs:string"/>
-            <xs:element name="due_date" type="xs:string"/>
+            <xs:element name="creation_date" type="xs:date"/>
+            <xs:element name="due_date" type="xs:date"/>
             <xs:element name="todo_status" type="tns:todo_status"/>
             <xs:element name="todo_for" type="tns:todo_for"/>
             <xs:element name="id" type="xs:long"/>
-            <xs:element name="user" type="tns:userSoap"/>
+            <xs:element name="user" type="tns:user"/>
         </xs:sequence>
     </xs:complexType>
     <xs:simpleType name="todo_status">
@@ -47,7 +47,7 @@
             <xs:enumeration value="ANDERE"/>
         </xs:restriction>
     </xs:simpleType>
-    <xs:complexType name="userSoap">
+    <xs:complexType name="user">
         <xs:sequence>
             <xs:element name="username" type="xs:string"/>
             <xs:element name="id" type="xs:long"/>
@@ -55,8 +55,15 @@
             <xs:element name="lastname" type="xs:string"/>
             <xs:element name="email" type="xs:string"/>
             <xs:element name="password" type="xs:string"/>
+            <xs:element name="roles" type="tns:role" maxOccurs="2"/>
         </xs:sequence>
     </xs:complexType>
+    <xs:simpleType name="role">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="USER"/>
+            <xs:enumeration value="ADMIN"/>
+        </xs:restriction>
+    </xs:simpleType>
     <xs:simpleType name="STypeProcessOutcome">
         <xs:annotation>
             <xs:documentation>Outcome type values are INFO/WARNING/ERROR</xs:documentation>
