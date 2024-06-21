@@ -59,3 +59,25 @@ html {
       --lumo-primary-text-color: hsl(214, 0%, 99%);
 
     }
+vaadin-grid.styling::part(high-rating) {
+    background-color: var(--lumo-success-color-10pct);
+}
+
+vaadin-grid.styling::part(low-rating) {
+    background-color: var(--lumo-error-color-10pct);
+}
+
+vaadin-grid.styling::part(loading-row-cell) {
+    background-color: var(--lumo-base-color);
+}
+
+vaadin-grid.styling::part(font-weight-bold) {
+    font-weight: bold;
+}
+.date-near {
+    color: #9c3434;
+}
+
+.date-soon {
+    color: #a5720c;
+}

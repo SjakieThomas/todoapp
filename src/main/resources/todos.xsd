@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:tns="http://todos.be/soap/todos"
+           targetNamespace="http://todos.be/soap/todos"
+           elementFormDefault="qualified" >
+    
+    <xs:element name="getTodosRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="title" type="xs:string" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="getTodosResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Todo" type="tns:Todo" minOccurs="1" maxOccurs="1"/>
+                <xs:element name= "type" type="tns:STypeProcessOutcome" minOccurs="1" maxOccurs="1"/>
+                <xs:element name= "errormessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="Todo">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="comment" type="xs:string"/>
+            <xs:element name="creation_date" type="xs:string"/>
+            <xs:element name="due_date" type="xs:string"/>
+            <xs:element name="todo_status" type="tns:todo_status"/>
+            <xs:element name="todo_for" type="tns:todo_for"/>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="user" type="tns:user"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="todo_status">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="DONE"/>
+            <xs:enumeration value="IN_PROGRESS"/>
+            <xs:enumeration value="TODO"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="todo_for">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SCHOOL"/>
+            <xs:enumeration value="WERK"/>
+            <xs:enumeration value="PRIVÉ"/>
+            <xs:enumeration value="ANDERE"/>
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:complexType name="user">
+        <xs:sequence>
+            <xs:element name="username" type="xs:string"/>
+            <xs:element name="id" type="xs:long"/>
+            <xs:element name="firstname" type="xs:string"/>
+            <xs:element name="lastname" type="xs:string"/>
+            <xs:element name="email" type="xs:string"/>
+            <xs:element name="password" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="STypeProcessOutcome">
+        <xs:annotation>
+            <xs:documentation>Outcome type values are INFO/WARNING/ERROR</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="INFO"/>
+            <xs:enumeration value="WARNING"/>
+            <xs:enumeration value="ERROR"/>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:schema>

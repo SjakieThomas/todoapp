@@ -3,6 +3,7 @@ package be.ucll.examen.views.todo;
 import be.ucll.examen.entity.Todo;
 import be.ucll.examen.entity.TodoFor;
 import be.ucll.examen.entity.TodoStatus;
+import be.ucll.examen.repository.TodoRepository;
 import be.ucll.examen.security.AuthenticatedUser;
 import be.ucll.examen.services.TodoService;
 import be.ucll.examen.views.MainLayout;
@@ -13,6 +14,7 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.Uses;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.html.Hr;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -20,6 +22,7 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.select.Select;
 import com.vaadin.flow.component.textfield.TextArea;
 import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.data.renderer.NativeButtonRenderer;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.data.VaadinSpringDataHelpers;
@@ -49,7 +52,11 @@ public class TODOView extends Composite<VerticalLayout>{
     private DatePicker dueDatePicker;
     private Select<TodoStatus> statusSelect;
     private Select<TodoFor> todoForSelect;
-    private Grid<Todo> multiSelectGrid;
+    private Grid<Todo> multiSelectGrid = new Grid<>(Todo.class, false);
+
+
+    @Autowired
+    private TodoRepository todoRepository;
 
     public TODOView() {
         HorizontalLayout layoutRow = new HorizontalLayout();
@@ -64,7 +71,46 @@ public class TODOView extends Composite<VerticalLayout>{
         Button buttonSecondary = new Button("new todo");
         Hr hr = new Hr();
 
-        multiSelectGrid = new Grid<>(Todo.class);
+        multiSelectGrid.addColumn(Todo::getTitle).setHeader("Title");
+        multiSelectGrid.addColumn(Todo::getComment).setHeader("Comment");
+        multiSelectGrid.addColumn(Todo::getCreationDate).setHeader("Creation date");
+        multiSelectGrid.addColumn(Todo::getDueDate).setHeader("Due date").setPartNameGenerator(person -> "font-weight-bold");
+        multiSelectGrid.addColumn(Todo::getStatus).setHeader("Status");
+        multiSelectGrid.addColumn(Todo::getTodoFor).setHeader("Todo for");
+        multiSelectGrid.addComponentColumn(report -> createStatusBadge(report.getStatus().toString())).setHeader("Status");
+        multiSelectGrid.addColumn(new NativeButtonRenderer<>("Remove item", clickedItem -> {
+            todoService.delete(clickedItem);setGrid(multiSelectGrid);         })
+        );
+
+
+//        multiSelectGrid.setPartNameGenerator(person -> {
+//            LocalDate today = LocalDate.now();
+//            LocalDate eventDate = person.getDueDate();
+//            long daysUntilEvent = ChronoUnit.DAYS.between(today, eventDate);
+//
+//            if (daysUntilEvent <= 3) {
+//                return "low-rating";
+//            }
+//            if (daysUntilEvent <= 7) {
+//                return "high-rating";
+//            }
+//            return null;
+//        });
+//        multiSelectGrid.setPartNameGenerator(todo -> {
+//            LocalDate today = LocalDate.now();
+//            LocalDate eventDate = todo.getDueDate();
+//            long daysUntilEvent = ChronoUnit.DAYS.between(today, eventDate);
+//            int days= (int) daysUntilEvent;
+//            if (days >= 8)
+//                return "date-near";
+//            if (days <= 4)
+//                return "date-soon";
+//            return null;
+//        });
+
+
+
+
         //<theme-editor-local-classname>
         multiSelectGrid.addClassName("t-odo-view-grid-1");
         VerticalLayout layoutColumn3 = new VerticalLayout();
@@ -222,4 +268,16 @@ public class TODOView extends Composite<VerticalLayout>{
         // Refresh grid
         setGrid(multiSelectGrid);
     }
+    private Span createStatusBadge(String status) {
+        String theme = switch (status) {
+            case "DONE" -> "badge contrast  primary";
+            case "TODO" -> "badge error primary";
+            default -> "badge success  primary";
+        };
+        Span badge = new Span(status);
+        badge.getElement().getThemeList().add(theme);
+        return badge;
+    }
+
+
 }

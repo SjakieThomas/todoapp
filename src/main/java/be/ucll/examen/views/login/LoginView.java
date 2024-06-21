@@ -13,7 +13,7 @@ import com.vaadin.flow.server.VaadinService;
 public class LoginView extends LoginOverlay {
     public LoginView() {
         setAction("login");
-        setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));
+        //setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));
 
         LoginI18n i18n = LoginI18n.createDefault();
         i18n.setHeader(new LoginI18n.Header());

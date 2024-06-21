@@ -27,16 +27,7 @@ public class SecurityConfiguration extends VaadinWebSecurity {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        /**
-         * @HELP
-         * {@link '
- * http.securityMatcher("/app/**");
-         * '}
-         *
-         * use the '' text to enable api endpoints
-         *
-         */
-        http.securityMatcher("/app/**");
+        http.securityMatcher("/app/**");    //comment this out to disable api endpoints
         super.configure(http);
         setLoginView(http, LoginView.class);
         //setStatelessAuthentication(http, new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256), "be.ucll.examen");

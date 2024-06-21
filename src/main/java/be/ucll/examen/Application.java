@@ -5,6 +5,7 @@ import com.vaadin.flow.theme.Theme;
 import com.vaadin.flow.theme.lumo.Lumo;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * The entry point of the Spring Boot application.
@@ -19,7 +20,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @Theme(value = "todoapp", variant = Lumo.DARK)
-
+//@EnableSwagger2   // geeft een @todo error
 public class Application implements AppShellConfigurator {
 
     public static void main(String[] args) {

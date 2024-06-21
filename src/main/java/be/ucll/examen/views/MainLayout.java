@@ -17,7 +17,7 @@ import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
 import com.vaadin.flow.theme.lumo.LumoUtility.*;
-import jakarta.annotation.security.PermitAll;
+import com.vaadin.flow.server.auth.AnonymousAllowed;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
 import java.io.ByteArrayInputStream;
@@ -26,7 +26,7 @@ import java.util.Optional;
 /**
  * The main view is a top-level placeholder for other views.
  */
-@PermitAll
+@AnonymousAllowed
 public class MainLayout extends AppLayout {
 
     /**
