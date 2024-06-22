@@ -10,6 +10,7 @@ package be.ucll.examen.SOAP.models.v1;
 
 import jakarta.xml.bind.annotation.XmlAccessType;
 import jakarta.xml.bind.annotation.XmlAccessorType;
+import jakarta.xml.bind.annotation.XmlElement;
 import jakarta.xml.bind.annotation.XmlRootElement;
 import jakarta.xml.bind.annotation.XmlType;
 
@@ -24,7 +25,8 @@ import jakarta.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
+ *         &lt;element name="todo" type="{http://todos.be/soap/todos}todo_create"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,27 +37,54 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
-    "id"
+    "userId",
+    "todo"
 })
-@XmlRootElement(name = "getTodosRequest")
-public class GetTodosRequest {
+@XmlRootElement(name = "createTodoRequest")
+public class CreateTodoRequest {
 
-    protected long id;
+    protected long userId;
+    @XmlElement(required = true)
+    protected TodoCreate todo;
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the userId property.
      * 
      */
-    public long getId() {
-        return id;
+    public long getUserId() {
+        return userId;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the userId property.
      * 
      */
-    public void setId(long value) {
-        this.id = value;
+    public void setUserId(long value) {
+        this.userId = value;
+    }
+
+    /**
+     * Gets the value of the todo property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link TodoCreate }
+     *     
+     */
+    public TodoCreate getTodo() {
+        return todo;
+    }
+
+    /**
+     * Sets the value of the todo property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link TodoCreate }
+     *     
+     */
+    public void setTodo(TodoCreate value) {
+        this.todo = value;
     }
 
 }

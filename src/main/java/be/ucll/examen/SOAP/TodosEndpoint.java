@@ -13,6 +13,7 @@ import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
+import java.io.Console;
 import java.util.Optional;
 
 //@Component
@@ -22,6 +23,12 @@ public class TodosEndpoint {
 
     @Autowired
     private TodoRepository todoRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService UserService;
+    @Autowired
+    private TodoService todoService;
 
 
     /**
@@ -44,7 +51,7 @@ public class TodosEndpoint {
             be.ucll.examen.SOAP.models.v1.Todo convertedTodo= CONVERTERS.convertToSoapTodo(todo.get());
             response.setType(STypeProcessOutcome.INFO);
             response.setTodo(convertedTodo);
-            response.setErrormessage("No errors not found");
+            response.setErrormessage("No errors found");
 
             return response;
         } else {
@@ -52,6 +59,33 @@ public class TodosEndpoint {
             response.setType(STypeProcessOutcome.ERROR);
             response.setTodo(null);
             response.setErrormessage("Todo not found");
+            return response;
+        }
+    }
+
+    @PayloadRoot(namespace = NAMESPACE_URI, localPart= "createTodoRequest")
+    @ResponsePayload
+    public CreateTodoResponse createTodo(@RequestPayload CreateTodoRequest request) {
+        // Create a new SOAP response object
+        CreateTodoResponse response = new CreateTodoResponse();
+
+        Todo todo = CONVERTERS.convertToEntity(request.getTodo(), request.getUserId(), UserService);
+        if (userRepository.findById(request.getUserId()).isEmpty()) {
+            response.setType(STypeProcessOutcome.ERROR);
+            response.setTodo(null);
+            response.setErrorMessage("no user with that id was found!");
+            return response;
+        } else if (request.getTodo() == null || todo==null) {
+            response.setType(STypeProcessOutcome.ERROR);
+            response.setTodo(null);
+            response.setErrorMessage("not all fields were specified! TODO IS NOT SAVED!");
+            return response;
+        } else {
+            todo.setUser(userRepository.findById(request.getUserId()).get());
+            todoService.save(todo,request.getUserId());
+            response.setType(STypeProcessOutcome.INFO);
+            response.setTodo(CONVERTERS.convertToSoapTodo(todo));
+            response.setErrorMessage("Test succesfully created");
             return response;
         }
     }

@@ -20,6 +20,35 @@
             </xs:sequence>
         </xs:complexType>
     </xs:element>
+    <xs:element name="createTodoRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <!--enter the user id-->
+                <xs:element name="userId" type="xs:long"/>
+                <xs:element name="todo" type="tns:todo_create"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="createTodoResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="tns:user" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="todo" type="tns:Todo" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="type" type="tns:STypeProcessOutcome" minOccurs="1" maxOccurs="1"/>
+                <xs:element name="errorMessage" type="xs:string" minOccurs="0" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="todo_create">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string"/>
+            <xs:element name="comment" type="xs:string"/>
+            <xs:element name="creation_date" type="xs:date"/>
+            <xs:element name="due_date" type="xs:date"/>
+            <xs:element name="todo_status" type="tns:todo_status"/>
+            <xs:element name="todo_for" type="tns:todo_for"/>
+        </xs:sequence>
+    </xs:complexType>
     <xs:complexType name="Todo">
         <xs:sequence>
             <xs:element name="title" type="xs:string"/>

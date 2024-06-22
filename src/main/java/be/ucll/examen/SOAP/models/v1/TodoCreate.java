@@ -17,12 +17,12 @@ import jakarta.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for Todo complex type.
+ * <p>Java class for todo_create complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="Todo"&gt;
+ * &lt;complexType name="todo_create"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
@@ -32,8 +32,6 @@ import jakarta.xml.bind.annotation.XmlType;
  *         &lt;element name="due_date" type="{http://www.w3.org/2001/XMLSchema}date"/&gt;
  *         &lt;element name="todo_status" type="{http://todos.be/soap/todos}todo_status"/&gt;
  *         &lt;element name="todo_for" type="{http://todos.be/soap/todos}todo_for"/&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}long"/&gt;
- *         &lt;element name="user" type="{http://todos.be/soap/todos}user"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -43,17 +41,15 @@ import jakarta.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "Todo", propOrder = {
+@XmlType(name = "todo_create", propOrder = {
     "title",
     "comment",
     "creationDate",
     "dueDate",
     "todoStatus",
-    "todoFor",
-    "id",
-    "user"
+    "todoFor"
 })
-public class Todo {
+public class TodoCreate {
 
     @XmlElement(required = true)
     protected String title;
@@ -71,9 +67,6 @@ public class Todo {
     @XmlElement(name = "todo_for", required = true)
     @XmlSchemaType(name = "string")
     protected TodoFor todoFor;
-    protected long id;
-    @XmlElement(required = true)
-    protected User user;
 
     /**
      * Gets the value of the title property.
@@ -217,46 +210,6 @@ public class Todo {
      */
     public void setTodoFor(TodoFor value) {
         this.todoFor = value;
-    }
-
-    /**
-     * Gets the value of the id property.
-     * 
-     */
-    public long getId() {
-        return id;
-    }
-
-    /**
-     * Sets the value of the id property.
-     * 
-     */
-    public void setId(long value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the user property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link User }
-     *     
-     */
-    public User getUser() {
-        return user;
-    }
-
-    /**
-     * Sets the value of the user property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link User }
-     *     
-     */
-    public void setUser(User value) {
-        this.user = value;
     }
 
 }

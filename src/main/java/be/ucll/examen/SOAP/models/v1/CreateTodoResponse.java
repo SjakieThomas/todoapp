@@ -26,9 +26,10 @@ import jakarta.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="Todo" type="{http://todos.be/soap/todos}Todo"/&gt;
+ *         &lt;element name="user" type="{http://todos.be/soap/todos}user"/&gt;
+ *         &lt;element name="todo" type="{http://todos.be/soap/todos}Todo"/&gt;
  *         &lt;element name="type" type="{http://todos.be/soap/todos}STypeProcessOutcome"/&gt;
- *         &lt;element name="errormessage" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="errorMessage" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -39,19 +40,46 @@ import jakarta.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "", propOrder = {
+    "user",
     "todo",
     "type",
-    "errormessage"
+    "errorMessage"
 })
-@XmlRootElement(name = "getTodosResponse")
-public class GetTodosResponse {
+@XmlRootElement(name = "createTodoResponse")
+public class CreateTodoResponse {
 
-    @XmlElement(name = "Todo", required = true)
+    @XmlElement(required = true)
+    protected User user;
+    @XmlElement(required = true)
     protected Todo todo;
     @XmlElement(required = true)
     @XmlSchemaType(name = "string")
     protected STypeProcessOutcome type;
-    protected String errormessage;
+    protected String errorMessage;
+
+    /**
+     * Gets the value of the user property.
+     * 
+     * @return
+     *     possible object is
+     *     {@link User }
+     *     
+     */
+    public User getUser() {
+        return user;
+    }
+
+    /**
+     * Sets the value of the user property.
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link User }
+     *     
+     */
+    public void setUser(User value) {
+        this.user = value;
+    }
 
     /**
      * Gets the value of the todo property.
@@ -102,27 +130,27 @@ public class GetTodosResponse {
     }
 
     /**
-     * Gets the value of the errormessage property.
+     * Gets the value of the errorMessage property.
      * 
      * @return
      *     possible object is
      *     {@link String }
      *     
      */
-    public String getErrormessage() {
-        return errormessage;
+    public String getErrorMessage() {
+        return errorMessage;
     }
 
     /**
-     * Sets the value of the errormessage property.
+     * Sets the value of the errorMessage property.
      * 
      * @param value
      *     allowed object is
      *     {@link String }
      *     
      */
-    public void setErrormessage(String value) {
-        this.errormessage = value;
+    public void setErrorMessage(String value) {
+        this.errorMessage = value;
     }
 
 }

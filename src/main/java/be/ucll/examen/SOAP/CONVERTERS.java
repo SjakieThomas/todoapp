@@ -8,8 +8,10 @@ import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
 import be.ucll.examen.SOAP.models.v1.Role;
-import be.ucll.examen.entity.Todo;
-import be.ucll.examen.entity.User;
+import be.ucll.examen.SOAP.models.v1.TodoCreate;
+import be.ucll.examen.entity.*;
+import be.ucll.examen.services.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 /**
@@ -93,8 +95,8 @@ public class CONVERTERS {
      *
      * @throws IllegalArgumentException If the input SOAP TodoStatus enum does not have a corresponding entity TodoStatus enum.
      */
-    public static be.ucll.examen.entity.TodoStatus convertToEntityStatus(be.ucll.examen.SOAP.models.v1.TodoStatus soapStatus) {
-        return soapStatus != null ? be.ucll.examen.entity.TodoStatus.valueOf(soapStatus.name()) : null;
+    public static TodoStatus convertToEntityStatus(be.ucll.examen.SOAP.models.v1.TodoStatus soapStatus) {
+        return soapStatus != null ? TodoStatus.valueOf(soapStatus.name()) : null;
     }
     /**
      * Converts an entity TodoStatus enum to a SOAP TodoStatus enum.
@@ -104,10 +106,10 @@ public class CONVERTERS {
      *
      * @throws IllegalArgumentException If the input entity TodoStatus enum does not have a corresponding SOAP TodoStatus enum.
      *
-     * @see be.ucll.examen.entity.TodoStatus
+     * @see TodoStatus
      * @see be.ucll.examen.SOAP.models.v1.TodoStatus
      */
-    public static be.ucll.examen.SOAP.models.v1.TodoStatus convertToSoapStatus(be.ucll.examen.entity.TodoStatus entityStatus) {
+    public static be.ucll.examen.SOAP.models.v1.TodoStatus convertToSoapStatus(TodoStatus entityStatus) {
         return entityStatus != null ? be.ucll.examen.SOAP.models.v1.TodoStatus.valueOf(entityStatus.name()) : null;
     }
 
@@ -141,7 +143,7 @@ public class CONVERTERS {
      *
      * @since 1.0
      */
-    public static be.ucll.examen.SOAP.models.v1.User convertToSoapUser(be.ucll.examen.entity.User entityUser) {
+    public static be.ucll.examen.SOAP.models.v1.User convertToSoapUser(User entityUser) {
         be.ucll.examen.SOAP.models.v1.User soapUser = new be.ucll.examen.SOAP.models.v1.User();
         soapUser.setId(entityUser.getId());
         soapUser.setUsername(entityUser.getUsername());
@@ -162,12 +164,12 @@ public class CONVERTERS {
      *
      * @since 1.0
      */
-    public static be.ucll.examen.entity.TodoFor convertToEntityFor(be.ucll.examen.SOAP.models.v1.TodoFor soapFor) {
+    public static TodoFor convertToEntityFor(be.ucll.examen.SOAP.models.v1.TodoFor soapFor) {
         return soapFor != null ? switch (soapFor) {
-            case WERK -> be.ucll.examen.entity.TodoFor.WERK;
-            case SCHOOL -> be.ucll.examen.entity.TodoFor.SCHOOL;
-            case PRIVÉ -> be.ucll.examen.entity.TodoFor.PRIVÉ;
-            case ANDERE -> be.ucll.examen.entity.TodoFor.ANDEREN;
+            case WERK -> TodoFor.WERK;
+            case SCHOOL -> TodoFor.SCHOOL;
+            case PRIVÉ -> TodoFor.PRIVÉ;
+            case ANDERE -> TodoFor.ANDEREN;
         } : null;
     }
     /**
@@ -178,7 +180,7 @@ public class CONVERTERS {
      *
      * @since 1.0
      */
-    public static be.ucll.examen.SOAP.models.v1.TodoFor convertToSoapFor(be.ucll.examen.entity.TodoFor entityFor) {
+    public static be.ucll.examen.SOAP.models.v1.TodoFor convertToSoapFor(TodoFor entityFor) {
         return entityFor != null ? switch (entityFor) {
             case WERK -> be.ucll.examen.SOAP.models.v1.TodoFor.WERK;
             case SCHOOL -> be.ucll.examen.SOAP.models.v1.TodoFor.SCHOOL;
@@ -214,6 +216,24 @@ public class CONVERTERS {
         return entityRoles;
     }
 
+
+
+    public static Todo convertToEntity(TodoCreate dto, Long id,UserService userService) {
+        Optional<User> user = userService.get(id);
+        if(user.isPresent()) {
+            Todo todo = new Todo();
+            todo.setTitle(dto.getTitle());
+            todo.setComment(dto.getComment());
+            todo.setCreationDate(convertToLocalDate(dto.getCreationDate()));
+            todo.setDueDate(convertToLocalDate(dto.getDueDate()));
+            todo.setStatus(convertToEntityStatus(dto.getTodoStatus()));
+            todo.setTodoFor(convertToEntityFor(dto.getTodoFor()));
+            todo.setUser(user.get());
+            return todo;
+        } else {
+            return null;
+        }
+    }
 
 
 }
