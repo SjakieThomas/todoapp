@@ -1,17 +1,16 @@
 package be.ucll.examen.SOAP;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import be.ucll.examen.SOAP.models.v1.Role;
 import be.ucll.examen.SOAP.models.v1.TodoCreate;
 import be.ucll.examen.entity.*;
 import be.ucll.examen.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.*;
 
 
 /**
@@ -120,7 +119,7 @@ public class CONVERTERS {
      * @param soapUser The SOAP User object to convert.
      * @return The converted entity User object.
      */
-    public static be.ucll.examen.entity.User convertToUserEntity(be.ucll.examen.SOAP.models.v1.User soapUser) {
+    public static User convertToUserEntity(be.ucll.examen.SOAP.models.v1.User soapUser) {
         Set<be.ucll.examen.entity.Role> entityRoles = CONVERTERS.convertToEntityRoles(soapUser.getRoles());
         User userE =new User();
         userE.setId(soapUser.getId());
@@ -218,6 +217,14 @@ public class CONVERTERS {
 
 
 
+/** Converts a TodoCreate object to an entity Todo object.
+ * @param dto The TodoCreate object to convert.
+ * @param id The id of the user to which the Todo will be assigned.
+ * @param userService The UserService to fetch the user by id.
+ * @return The converted entity Todo object if the user is found, otherwise null.
+ * @throws NullPointerException If the input dto or userService is null.
+ * @throws IllegalArgumentException If the input id is null or the user is not found.
+ */
     public static Todo convertToEntity(TodoCreate dto, Long id,UserService userService) {
         Optional<User> user = userService.get(id);
         if(user.isPresent()) {

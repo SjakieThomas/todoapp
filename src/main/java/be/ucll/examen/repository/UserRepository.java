@@ -13,7 +13,6 @@ import org.springframework.stereotype.Repository;
  *
  * @author Thomas Vogelaers
  * @version 1.0
- * @since 2024-06-08 18:34
  */
 @Repository
 public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificationExecutor<User> {

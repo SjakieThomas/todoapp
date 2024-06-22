@@ -1,22 +1,80 @@
 // vite.generated.ts
-import path from "path";
-import { existsSync as existsSync5, mkdirSync as mkdirSync2, readdirSync as readdirSync2, readFileSync as readFileSync4, writeFileSync as writeFileSync2 } from "fs";
-import { createHash } from "crypto";
+import path, {
+    basename as basename2,
+    basename,
+    basename as basename3,
+    extname,
+    relative,
+    resolve as resolve3,
+    resolve,
+    resolve as resolve4,
+    resolve as resolve2
+} from "path";
+// target/plugins/application-theme-plugin/theme-handle.js
+// target/plugins/application-theme-plugin/theme-copy.js
+// target/plugins/theme-loader/theme-loader-utils.js
+import {
+    copyFileSync,
+    existsSync as existsSync5,
+    existsSync as existsSync3,
+    existsSync as existsSync2,
+    existsSync,
+    existsSync as existsSync4,
+    mkdirSync as mkdirSync2,
+    mkdirSync,
+    readdirSync as readdirSync2,
+    readdirSync,
+    readFileSync as readFileSync4,
+    readFileSync as readFileSync2,
+    readFileSync,
+    readFileSync as readFileSync3,
+    statSync,
+    writeFileSync as writeFileSync2,
+    writeFileSync
+} from "fs";
+import {createHash} from "crypto";
 import * as net from "net";
 
-// target/plugins/application-theme-plugin/theme-handle.js
-import { existsSync as existsSync3, readFileSync as readFileSync2 } from "fs";
-import { resolve as resolve3 } from "path";
-
 // target/plugins/application-theme-plugin/theme-generator.js
-import { globSync as globSync2 } from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/glob/dist/esm/index.js";
-import { resolve as resolve2, basename as basename2 } from "path";
-import { existsSync as existsSync2, readFileSync, writeFileSync } from "fs";
+import {
+    globSync as globSync2,
+    globSync,
+    globSync as globSync3
+} from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/glob/dist/esm/index.js";
+// target/plugins/react-function-location-plugin/react-function-location-plugin.js
+import * as t
+    from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/@babel/types/lib/index.js";
+// vite.generated.ts
+import {
+    defineConfig,
+    mergeConfig
+} from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/vite/dist/node/index.js";
+import {
+    getManifest
+} from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/workbox-build/build/index.js";
+import * as rollup
+    from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/rollup/dist/es/rollup.js";
+import brotli
+    from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/rollup-plugin-brotli/lib/index.cjs.js";
+import replace
+    from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/@rollup/plugin-replace/dist/es/index.js";
+import checker
+    from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/vite-plugin-checker/dist/esm/main.js";
 
-// target/plugins/application-theme-plugin/theme-copy.js
-import { readdirSync, statSync, mkdirSync, existsSync, copyFileSync } from "fs";
-import { resolve, basename, relative, extname } from "path";
-import { globSync } from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/glob/dist/esm/index.js";
+// target/plugins/rollup-plugin-postcss-lit-custom/rollup-plugin-postcss-lit.js
+import {
+    createFilter
+} from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/@rollup/pluginutils/dist/es/index.js";
+import transformAst
+    from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/transform-ast/index.js";
+// vite.generated.ts
+import {createRequire} from "module";
+import {
+    visualizer
+} from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/rollup-plugin-visualizer/dist/plugin/index.js";
+import reactPlugin
+    from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/@vitejs/plugin-react/dist/index.mjs";
+
 var ignoredFileExtensions = [".css", ".js", ".json"];
 function copyThemeResources(themeFolder2, projectStaticAssetsOutputFolder, logger) {
   const staticAssetsThemeFolder = resolve(projectStaticAssetsOutputFolder, "themes", basename(themeFolder2));
@@ -463,10 +521,6 @@ function extractThemeName(frontendGeneratedFolder) {
   }
 }
 
-// target/plugins/theme-loader/theme-loader-utils.js
-import { existsSync as existsSync4, readFileSync as readFileSync3 } from "fs";
-import { resolve as resolve4, basename as basename3 } from "path";
-import { globSync as globSync3 } from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/glob/dist/esm/index.js";
 var urlMatcher = /(url\(\s*)(\'|\")?(\.\/|\.\.\/)((?:\3)*)?(\S*)(\2\s*\))/g;
 function assetsContains(fileUrl, themeFolder2, logger) {
   const themeProperties = getThemeProperties2(themeFolder2);
@@ -536,8 +590,6 @@ function rewriteCssUrls(source, handledResourceFolder, themeFolder2, logger, opt
   return source;
 }
 
-// target/plugins/react-function-location-plugin/react-function-location-plugin.js
-import * as t from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/@babel/types/lib/index.js";
 function addFunctionComponentSourceLocationBabel() {
   function isReactFunctionName(name) {
     return name && name.match(/^[A-Z].*/);
@@ -609,20 +661,6 @@ var vaadin_dev_server_settings_default = {
   offlinePath: "'offline.html'"
 };
 
-// vite.generated.ts
-import {
-  defineConfig,
-  mergeConfig
-} from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/vite/dist/node/index.js";
-import { getManifest } from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/workbox-build/build/index.js";
-import * as rollup from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/rollup/dist/es/rollup.js";
-import brotli from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/rollup-plugin-brotli/lib/index.cjs.js";
-import replace from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/@rollup/plugin-replace/dist/es/index.js";
-import checker from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/vite-plugin-checker/dist/esm/main.js";
-
-// target/plugins/rollup-plugin-postcss-lit-custom/rollup-plugin-postcss-lit.js
-import { createFilter } from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/@rollup/pluginutils/dist/es/index.js";
-import transformAst from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/transform-ast/index.js";
 var assetUrlRE = /__VITE_ASSET__([\w$]+)__(?:\$_(.*?)__)?/g;
 var escape = (str) => str.replace(assetUrlRE, '${unsafeCSSTag("__VITE_ASSET__$1__$2")}').replace(/`/g, "\\`").replace(/\\(?!`)/g, "\\\\");
 function postcssLit(options = {}) {
@@ -674,10 +712,6 @@ function postcssLit(options = {}) {
   };
 }
 
-// vite.generated.ts
-import { createRequire } from "module";
-import { visualizer } from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/rollup-plugin-visualizer/dist/plugin/index.js";
-import reactPlugin from "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/node_modules/@vitejs/plugin-react/dist/index.mjs";
 var __vite_injected_original_dirname = "/Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp";
 var __vite_injected_original_import_meta_url = "file:///Users/thomas/Documents/SCHOOL/applicatieTODO/todoapp/vite.generated.ts";
 var require2 = createRequire(__vite_injected_original_import_meta_url);

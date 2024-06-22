@@ -1,22 +1,24 @@
 package be.ucll.examen.SOAP;
 
-
-
-import be.ucll.examen.SOAP.models.v1.GetTodosRequest;
-import be.ucll.examen.SOAP.models.v1.GetTodosResponse;
-import be.ucll.examen.SOAP.models.v1.STypeProcessOutcome;
+import be.ucll.examen.SOAP.models.v1.*;
 import be.ucll.examen.entity.Todo;
-import be.ucll.examen.repository.TodoRepository;
+import be.ucll.examen.repository.*;
+import be.ucll.examen.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ws.server.endpoint.annotation.Endpoint;
 import org.springframework.ws.server.endpoint.annotation.PayloadRoot;
 import org.springframework.ws.server.endpoint.annotation.RequestPayload;
 import org.springframework.ws.server.endpoint.annotation.ResponsePayload;
 
-import java.io.Console;
 import java.util.Optional;
 
-//@Component
+import static be.ucll.examen.SOAP.CONVERTERS.*;
+
+/** This class represents a SOAP endpoint for managing Todos.
+ * It handles SOAP requests to get and create Todos.
+ * @author Thomas Vogelaers
+ * @version 1.0
+ */
 @Endpoint
 public class TodosEndpoint {
     private static final String NAMESPACE_URI = "http://todos.be/soap/todos";
@@ -26,50 +28,44 @@ public class TodosEndpoint {
     @Autowired
     private UserRepository userRepository;
     @Autowired
-    private UserService UserService;
-    @Autowired
     private TodoService todoService;
+    @Autowired
+    private UserService UserService;
 
 
-    /**
-     * This method handles the SOAP request to get a single Todo by its ID.
-     *
+    /** This method handles the SOAP request to get a single Todo by its ID.
      * @param request The SOAP request containing the ID of the Todo to retrieve.
      * @return The SOAP response containing the requested Todo or an error message if the Todo is not found.
      */
     @PayloadRoot(namespace = NAMESPACE_URI, localPart= "getTodosRequest")
     @ResponsePayload
     public GetTodosResponse getTodo(@RequestPayload GetTodosRequest request) {
-        // Create a new SOAP response object
         GetTodosResponse response = new GetTodosResponse();
-
-        // Attempt to find the Todo in the database by its ID
         Optional<Todo> todo = todoRepository.findById(request.getId());
 
-        // If the Todo is found, convert it to a SOAP Todo and set the response type to INFO
         if (todo.isPresent()) {
-            be.ucll.examen.SOAP.models.v1.Todo convertedTodo= CONVERTERS.convertToSoapTodo(todo.get());
+            be.ucll.examen.SOAP.models.v1.Todo convertedTodo= convertToSoapTodo(todo.get());
             response.setType(STypeProcessOutcome.INFO);
             response.setTodo(convertedTodo);
             response.setErrormessage("No errors found");
-
-            return response;
         } else {
-            // If the Todo is not found, set the response type to ERROR and provide an error message
             response.setType(STypeProcessOutcome.ERROR);
             response.setTodo(null);
             response.setErrormessage("Todo not found");
-            return response;
         }
+        return response;
     }
 
+    /** This method handles the SOAP request to create a new Todo.
+     * @param request The SOAP request containing the Todo data and the user ID.
+     * @return The SOAP response containing the created Todo or an error message if the user is not found or if the Todo data is incomplete.
+     */
     @PayloadRoot(namespace = NAMESPACE_URI, localPart= "createTodoRequest")
     @ResponsePayload
     public CreateTodoResponse createTodo(@RequestPayload CreateTodoRequest request) {
-        // Create a new SOAP response object
         CreateTodoResponse response = new CreateTodoResponse();
 
-        Todo todo = CONVERTERS.convertToEntity(request.getTodo(), request.getUserId(), UserService);
+        Todo todo = convertToEntity(request.getTodo(), request.getUserId(), UserService);
         if (userRepository.findById(request.getUserId()).isEmpty()) {
             response.setType(STypeProcessOutcome.ERROR);
             response.setTodo(null);

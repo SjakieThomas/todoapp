@@ -42,52 +42,91 @@ public class TODOView extends Composite<VerticalLayout>{
 
     @Autowired
     private AuthenticatedUser authenticatedUser;
-
-    private Long todoId;
     @Autowired
     private TodoService todoService;
-    private TextField textField;
-    private TextArea textArea;
-    private DatePicker creationDatePicker;
-    private DatePicker dueDatePicker;
-    private Select<TodoStatus> statusSelect;
-    private Select<TodoFor> todoForSelect;
-    private Grid<Todo> multiSelectGrid = new Grid<>(Todo.class, false);
-
-
     @Autowired
     private TodoRepository todoRepository;
 
+
+    private final Select<TodoFor> todoForSelect = new Select<>("Todo for",null, TodoFor.values());
+    private final Select<TodoStatus> statusSelect = new Select<>("Todo status",null, TodoStatus.values());
+    private final TextField textField = new TextField("Name");
+    private final TextArea textArea = new TextArea("Comment:");
+    private final DatePicker dueDatePicker = new DatePicker("Due date:");
+    private final DatePicker creationDatePicker = new DatePicker("Creation date:");
+    private final Grid<Todo> multiSelectGrid = new Grid<>(Todo.class, false);
+
     public TODOView() {
-        HorizontalLayout layoutRow = new HorizontalLayout();
         VerticalLayout layoutColumn2 = new VerticalLayout();
+        VerticalLayout layoutColumn3 = new VerticalLayout();
+        HorizontalLayout layoutRow = new HorizontalLayout();
         HorizontalLayout layoutRow2 = new HorizontalLayout();
         HorizontalLayout layoutRow3 = new HorizontalLayout();
-        Select<TodoFor> filterTodoForSelect = new Select<>();
-        Select<TodoStatus> filterStatusSelect = new Select<>();
-        DatePicker fromDatePicker = new DatePicker();
-        DatePicker tillDatePicker = new DatePicker();
-        Button buttonPrimary = new Button("Filter");
-        Button buttonSecondary = new Button("new todo");
+
         Hr hr = new Hr();
 
-        multiSelectGrid.addColumn(Todo::getTitle).setHeader("Title");
-        multiSelectGrid.addColumn(Todo::getComment).setHeader("Comment");
-        multiSelectGrid.addColumn(Todo::getCreationDate).setHeader("Creation date");
-        multiSelectGrid.addColumn(Todo::getDueDate).setHeader("Due date").setPartNameGenerator(person -> "font-weight-bold");
-        multiSelectGrid.addColumn(Todo::getStatus).setHeader("Status");
-        multiSelectGrid.addColumn(Todo::getTodoFor).setHeader("Todo for");
+        Button buttonPrimary = new Button("Filter");
+        Button buttonPrimary2 = new Button("Create");
+        Button buttonSecondary = new Button("new todo");
+        Select<TodoFor> filterTodoForSelect = new Select<>("Todo for",null, TodoFor.values());
+        Select<TodoStatus> filterStatusSelect = new Select<>("Todo status",null, TodoStatus.values());
+        DatePicker tillDatePicker = new DatePicker("Till:");
+        DatePicker fromDatePicker = new DatePicker("From:");
+
+        layoutColumn2.setSizeFull();
+        layoutColumn2.expand(layoutRow3, layoutRow2,layoutRow,getContent(),tillDatePicker,fromDatePicker,filterStatusSelect,filterTodoForSelect);
+        layoutColumn2.setAlignItems(FlexComponent.Alignment.START);
+        layoutColumn2.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
+
+        layoutRow.addClassName(Gap.XSMALL);
+        layoutRow.setSizeFull();
+        layoutRow.setAlignItems(FlexComponent.Alignment.CENTER);
+        layoutRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+
+        layoutRow2.setSizeFull();
+        layoutRow2.setHeight("min-content");
+        layoutRow2.addClassNames(Gap.XLARGE,Padding.XSMALL);
+        layoutRow2.setAlignItems(FlexComponent.Alignment.CENTER);
+        layoutRow2.setAlignSelf(FlexComponent.Alignment.START, multiSelectGrid);
+        layoutRow2.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
+
+        layoutRow3.setSizeFull();
+        layoutRow3.setAlignItems(FlexComponent.Alignment.CENTER);
+        layoutRow3.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
+
+        filterTodoForSelect.setMaxWidth("200px");
+        filterStatusSelect.setMaxWidth("200px");
+        fromDatePicker.setMaxWidth("200px");
+        tillDatePicker.setMaxWidth("200px");
+
+        buttonPrimary.setWidth("min-content");
+        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        buttonPrimary.addClickListener(e -> filterGrid(multiSelectGrid, filterTodoForSelect.getValue(), filterStatusSelect.getValue(), fromDatePicker.getValue(), tillDatePicker.getValue()));
+
+        buttonPrimary2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        buttonPrimary2.addClickListener(e -> createTodo());
+
+        buttonSecondary.setWidth("min-content");
+        buttonSecondary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        buttonSecondary.addClickListener(e -> {layoutColumn3.setVisible(!layoutColumn3.isVisible());});
+
+
+        multiSelectGrid.setSizeFull();
+        multiSelectGrid.setMinHeight("600px");
+        multiSelectGrid.getStyle().set("flex-grow", "2");
+        multiSelectGrid.addClassName("t-odo-view-grid-1");
+        multiSelectGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
+        multiSelectGrid.addColumns("title","comment","todoFor","status","creationDate","dueDate");
         multiSelectGrid.addComponentColumn(report -> createStatusBadge(report.getStatus().toString())).setHeader("Status");
         multiSelectGrid.addColumn(new NativeButtonRenderer<>("Remove item", clickedItem -> {
-            todoService.delete(clickedItem);setGrid(multiSelectGrid);         })
-        );
-
+            todoService.delete(clickedItem);
+            setGrid(multiSelectGrid);
+        }));
 
 //        multiSelectGrid.setPartNameGenerator(person -> {
 //            LocalDate today = LocalDate.now();
 //            LocalDate eventDate = person.getDueDate();
 //            long daysUntilEvent = ChronoUnit.DAYS.between(today, eventDate);
-//
 //            if (daysUntilEvent <= 3) {
 //                return "low-rating";
 //            }
@@ -108,136 +147,30 @@ public class TODOView extends Composite<VerticalLayout>{
 //            return null;
 //        });
 
-
-
-
         //<theme-editor-local-classname>
-        multiSelectGrid.addClassName("t-odo-view-grid-1");
-        VerticalLayout layoutColumn3 = new VerticalLayout();
-        textField = new TextField("Name");
-        textArea = new TextArea("Comment:");
-        creationDatePicker = new DatePicker("Creation date:");
-        dueDatePicker = new DatePicker("Due date:");
-        statusSelect = new Select<>();
-        todoForSelect = new Select<>();
-        Button buttonPrimary2 = new Button("Create");
 
         getContent().setSpacing(false);
         getContent().setPadding(false);
         getContent().setWidth("100%");
-        getContent().getStyle().set("flex-grow", "1");
         getContent().setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         getContent().setAlignItems(FlexComponent.Alignment.CENTER);
 
-        layoutRow.addClassName(Gap.XSMALL);
-        layoutRow.setWidth("100%");
-        layoutRow.getStyle().set("flex-grow", "1");
-        layoutRow.setAlignItems(FlexComponent.Alignment.CENTER);
-        layoutRow.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-
-        layoutColumn2.setWidth("100%");
-        layoutColumn2.setHeight("100%");
-        layoutColumn2.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
-        layoutColumn2.setAlignItems(FlexComponent.Alignment.START);
-
-        layoutRow2.setWidthFull();
-        layoutColumn2.setFlexGrow(1.0, layoutRow2);
-        layoutRow2.addClassName(Gap.XLARGE);
-        layoutRow2.addClassName(Padding.XSMALL);
-        layoutRow2.setWidth("100%");
-        layoutRow2.setHeight("min-content");
-        layoutRow2.setAlignItems(FlexComponent.Alignment.CENTER);
-        layoutRow2.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
-
-        layoutRow3.setWidthFull();
-        layoutColumn2.setFlexGrow(1.0, layoutRow3);
-        layoutRow3.setHeight("100%");
-        layoutRow2.addClassName(Gap.XLARGE);
-        layoutRow2.addClassName(Padding.XSMALL);
-        layoutRow3.setAlignItems(FlexComponent.Alignment.CENTER);
-        layoutRow3.setJustifyContentMode(FlexComponent.JustifyContentMode.END);
-
-
-        filterTodoForSelect.setLabel("For:");
-        filterTodoForSelect.setItems(TodoFor.values());
-        layoutRow2.setAlignSelf(FlexComponent.Alignment.START, filterTodoForSelect);
-        filterTodoForSelect.getStyle().set("flex-grow", "1");
-        filterTodoForSelect.setMaxWidth("200px");
-
-        filterStatusSelect.setLabel("Status:");
-        filterStatusSelect.setItems(TodoStatus.values());
-        filterStatusSelect.getStyle().set("flex-grow", "1");
-        filterStatusSelect.setMaxWidth("200px");
-
-        fromDatePicker.setLabel("From:");
-        fromDatePicker.getStyle().set("flex-grow", "1");
-        fromDatePicker.setMaxWidth("200px");
-
-        tillDatePicker.setLabel("Till:");
-        tillDatePicker.getStyle().set("flex-grow", "1");
-        tillDatePicker.setMaxWidth("200px");
-
-        buttonPrimary.setWidth("min-content");
-        buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonPrimary.addClickListener(e -> filterGrid(multiSelectGrid, filterTodoForSelect.getValue(), filterStatusSelect.getValue(), fromDatePicker.getValue(), tillDatePicker.getValue()));
-        buttonSecondary.setWidth("min-content");
-        buttonSecondary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonSecondary.addClickListener(e -> {layoutColumn3.setVisible(!layoutColumn3.isVisible());});
-
-
-        layoutRow2.setWidthFull();
-        layoutColumn2.setFlexGrow(1.0, layoutRow2);
-        layoutRow2.setWidth("100%");
-        layoutRow2.setHeight("100%");
-        layoutRow2.getStyle().set("flex-grow", "1");
-
-        multiSelectGrid.setSelectionMode(Grid.SelectionMode.SINGLE);
-        layoutRow2.setAlignSelf(FlexComponent.Alignment.START, multiSelectGrid);
-        //layoutColumn3.setAlignSelf(FlexComponent.Alignment.CENTER, multiSelectGrid);
-        multiSelectGrid.setWidth("100%");
-        multiSelectGrid.setMinHeight("600px");
-        multiSelectGrid.setHeight("100%");
-        multiSelectGrid.getStyle().set("flex-grow", "2");
-        setGrid(multiSelectGrid);
-
         layoutColumn3.addClassName(Padding.XLARGE);
-        layoutColumn3.setHeight("min-content");
+        layoutColumn3.setSizeFull();
         layoutColumn3.setWidth("min-content");
         layoutColumn3.setJustifyContentMode(FlexComponent.JustifyContentMode.START);
         layoutColumn3.setAlignItems(FlexComponent.Alignment.END);
         layoutColumn3.setFlexGrow(1.0, layoutRow3);
-
-        statusSelect.setLabel("Status");
-        statusSelect.setItems(TodoStatus.values());
-
-        todoForSelect.setLabel("This item is for:");
-        todoForSelect.setItems(TodoFor.values());
-
-
-        buttonPrimary2.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        buttonPrimary2.addClickListener(e -> createTodo());
+        //layoutColumn3.setAlignSelf(FlexComponent.Alignment.CENTER, multiSelectGrid);
 
         getContent().add(layoutRow);
         layoutRow.add(layoutColumn2);
-        layoutColumn2.add(layoutRow2);
-        layoutRow2.add(filterTodoForSelect);
-        layoutRow2.add(filterStatusSelect);
-        layoutRow2.add(fromDatePicker);
-        layoutRow2.add(tillDatePicker);
-        layoutRow2.add(buttonPrimary);
-        layoutRow2.add(buttonSecondary);
-        layoutColumn2.add(hr);
-        layoutColumn2.add(layoutRow3);
-        layoutRow3.add(multiSelectGrid);
-        layoutRow3.add(layoutColumn3);
-        layoutColumn3.add(textField);
-        layoutColumn3.add(textArea);
-        layoutColumn3.add(creationDatePicker);
-        layoutColumn3.add(dueDatePicker);
-        layoutColumn3.add(statusSelect);
-        layoutColumn3.add(todoForSelect);
-        layoutColumn3.add(buttonPrimary2);
+        layoutColumn2.add(layoutRow2,hr,layoutRow3);
+        layoutRow2.add(filterTodoForSelect,filterStatusSelect,fromDatePicker,tillDatePicker,buttonPrimary,buttonSecondary);
+        layoutRow3.add(multiSelectGrid,layoutColumn3);
+        layoutColumn3.add(textField,textArea,creationDatePicker,dueDatePicker,statusSelect,todoForSelect,buttonPrimary2);
 
+        setGrid(multiSelectGrid);
         layoutColumn3.setVisible(false);
     }
 

@@ -11,44 +11,74 @@ import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
+/** Service class for managing User entities.
+ * @author Thomas Vogelaers
+ * @version 1.0
+ */
 @Service
 public class UserService {
 
     private final UserRepository repository;
 
+    /** Constructor for UserService.
+     * @param repository UserRepository for database operations.
+     */
     @Autowired
     public UserService(UserRepository repository) {
         this.repository = repository;
     }
-
+    /** Retrieves a User by its ID.
+     * @param id The ID of the User to retrieve.
+     * @return An Optional containing the User if found, otherwise an empty Optional.
+     */
     public Optional<User> get(Long id) {
         return repository.findById(id);
     }
-
+    /** Saves a User to the database.
+     * @param user The User to save.
+     */
     public void save(User user) {
         repository.save(user);
     }
-
+    /** Deletes a User from the database by its ID.
+     * @param id The ID of the User to delete.
+     */
     public void delete(Long id) {
         repository.deleteById(id);
     }
-
+    /** Retrieves a paginated list of Users.
+     * @param pageable The Pageable object for pagination.
+     * @return A Page containing the Users.
+     */
     public Page<User> list(Pageable pageable) {
         return repository.findAll(pageable);
     }
-
+    /** Retrieves a paginated list of Users based on a filter.
+     * @param pageable The Pageable object for pagination.
+     * @param filter The Specification for filtering.
+     * @return A Page containing the filtered Users.
+     */
     public Page<User> list(Pageable pageable, Specification<User> filter) {
         return repository.findAll(filter, pageable);
     }
-
+    /** Retrieves the total count of Users in the database.
+     * @return The total count of Users.
+     */
     public int count() {
         return (int) repository.count();
     }
-
+    /** Retrieves a User by its username.
+     * @param username The username of the User to retrieve.
+     * @return An Optional containing the User if found, otherwise an empty Optional.
+     */
     public Optional<User> getUserByUsername(String username) {
         return Optional.ofNullable(repository.findByUsername(username));
     }
-
+    /** Updates an existing User in the database.
+     * @param newUser The updated User.
+     * @return The updated User.
+     * @throws EntityNotFoundException If the User with the given ID does not exist.
+     */
     public User update(User newUser) {
         Optional<User> existingUserOptional = repository.findById(newUser.getId());
 

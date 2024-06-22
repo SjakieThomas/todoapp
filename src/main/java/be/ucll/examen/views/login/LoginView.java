@@ -4,13 +4,17 @@ import com.vaadin.flow.component.login.LoginI18n;
 import com.vaadin.flow.component.login.LoginOverlay;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import com.vaadin.flow.router.internal.RouteUtil;
-import com.vaadin.flow.server.VaadinService;
 
-
+/**
+ * This class represents the login view of the application.
+ * It extends the LoginOverlay component from Vaadin Flow, which provides a login form.
+ */
 @PageTitle("login")
 @Route(value = "login")
 public class LoginView extends LoginOverlay {
+    /** Constructor for LoginView class.
+     * It initializes the login form with custom settings and i18n messages.
+     */
     public LoginView() {
         setAction("login");
         //setAction(RouteUtil.getRoutePath(VaadinService.getCurrent().getContext(), getClass()));

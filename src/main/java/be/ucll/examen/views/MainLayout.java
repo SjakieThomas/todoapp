@@ -12,15 +12,12 @@ import com.vaadin.flow.component.contextmenu.MenuItem;
 import com.vaadin.flow.component.html.*;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.menubar.MenuBar;
-import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.RouterLink;
-import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.server.auth.AccessAnnotationChecker;
-import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
+import com.vaadin.flow.theme.lumo.LumoUtility.*;
 import org.vaadin.lineawesome.LineAwesomeIcon;
 
-import java.io.ByteArrayInputStream;
 import java.util.Optional;
 
 /**
@@ -34,8 +31,16 @@ public class MainLayout extends AppLayout {
      */
     public static class MenuItemInfo extends ListItem {
 
+        /**
+         * The view class associated with this menu item.
+         */
         private final Class<? extends Component> view;
 
+        /** Constructor for MenuItemInfo.
+         * @param menuTitle The title of the menu item.
+         * @param icon      The icon to be displayed with the menu item.
+         * @param view      The view class associated with this menu item.
+         */
         public MenuItemInfo(String menuTitle, Component icon, Class<? extends Component> view) {
             this.view = view;
             RouterLink link = new RouterLink();
@@ -55,21 +60,33 @@ public class MainLayout extends AppLayout {
             add(link);
         }
 
+        /** Getter for the view class associated with this menu item.
+         * @return The view class associated with this menu item.
+         */
         public Class<?> getView() {
             return view;
         }
 
     }
 
-    private AuthenticatedUser authenticatedUser;
-    private AccessAnnotationChecker accessChecker;
+    private final AuthenticatedUser authenticatedUser;
+    private final AccessAnnotationChecker accessChecker;
 
+    /** The constructor for the MainLayout class. It initializes the authenticatedUser and accessChecker fields,
+     * and adds the created header content to the navbar of the AppLayout.
+     * @param authenticatedUser The AuthenticatedUser object that provides access to the authenticated user's information.
+     * @param accessChecker     The AccessAnnotationChecker object that checks access permissions for views.
+     */
     public MainLayout(AuthenticatedUser authenticatedUser, AccessAnnotationChecker accessChecker) {
         this.authenticatedUser = authenticatedUser;
         this.accessChecker = accessChecker;
         addToNavbar(createHeaderContent());
     }
 
+    /** This method creates and returns the header content for the main layout.
+     * The header includes the application name, user avatar (if logged in), and navigation menu.
+     * @return the header content component
+     */
     private Component createHeaderContent() {
         Header header = new Header();
         header.addClassNames(BoxSizing.BORDER, Display.FLEX, FlexDirection.COLUMN, Width.FULL);
@@ -86,9 +103,9 @@ public class MainLayout extends AppLayout {
             User user = maybeUser.get();
 
             Avatar avatar = new Avatar(user.getLastName());
-            StreamResource resource = new StreamResource("profile-pic",
-                    () -> new ByteArrayInputStream(user.getProfilePicture()));
-            avatar.setImageResource(resource);
+            //StreamResource resource = new StreamResource("profile-pic",
+            //       () -> new ByteArrayInputStream(user.getProfilePicture()));
+            //avatar.setImageResource(resource);
             avatar.setThemeName("xsmall");
             avatar.getElement().setAttribute("tabindex", "-1");
 
@@ -132,6 +149,12 @@ public class MainLayout extends AppLayout {
         return header;
     }
 
+    /**
+     * This method creates an array of MenuItemInfo objects, each representing a navigation menu item.
+     * The MenuItemInfo objects contain the menu title, icon, and the corresponding view class.
+     *
+     * @return an array of MenuItemInfo objects representing the navigation menu items
+     */
     private MenuItemInfo[] createMenuItems() {
         return new MenuItemInfo[]{ //
                 new MenuItemInfo("Register", LineAwesomeIcon.USER.create(), RegisterView.class), //
@@ -150,13 +173,5 @@ public class MainLayout extends AppLayout {
     @Override
     protected void afterNavigation() {
         super.afterNavigation();
-     //   viewTitle.setText(getCurrentPageTitle());
-    }
-    /** This method retrieves the current page title from the content's PageTitle annotation.
-     * If the content does not have a PageTitle annotation, an empty string is returned.
-     * @return the current page title               */
-    private String getCurrentPageTitle() {
-        PageTitle title = getContent().getClass().getAnnotation(PageTitle.class);
-        return title == null ? "" : title.value();
     }
 }

@@ -19,7 +19,6 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.router.RouteAlias;
 import com.vaadin.flow.server.auth.AnonymousAllowed;
-import com.vaadin.flow.theme.lumo.LumoUtility;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -32,74 +31,77 @@ public class RegisterView extends Composite<VerticalLayout> {
     @Autowired
     private UserService userService;
 
-    private TextField emailField;
-    private PasswordField passwordField;
-    private TextField firstNameField;
-    private TextField lastNameField;
-    private TextField userNameField;
+    // Form fields
+    private final TextField emailField = new TextField("Email");
+    private final PasswordField passwordField = new PasswordField("Password");
+    private final TextField firstNameField = new TextField("First Name");
+    private final TextField lastNameField = new TextField("Last Name");
+    private final TextField userNameField = new TextField("Username");
 
     public RegisterView() {
-        VerticalLayout layoutColumn2 = new VerticalLayout();
-        H3 h3 = new H3();
-        FormLayout formLayout2Col = new FormLayout();
-        emailField = new TextField("Email");
-        passwordField = new PasswordField("Password");
-        firstNameField = new TextField("First Name");
-        lastNameField = new TextField("Last Name");
-        userNameField = new TextField("Username");
-        HorizontalLayout layoutRow = new HorizontalLayout();
-        Button registerButton = new Button("Register");
-        Button cancelButton = new Button();
+    //Layout main Content
         getContent().setWidth("100%");
         getContent().getStyle().set("flex-grow", "1");
-        getContent().setJustifyContentMode(JustifyContentMode.START);
         getContent().setAlignItems(Alignment.CENTER);
-        layoutColumn2.setWidth("100%");
-        layoutColumn2.setMaxWidth("800px");
+        getContent().setJustifyContentMode(JustifyContentMode.START);
+    // Main layout column
+        VerticalLayout layoutColumn2 = new VerticalLayout();
         layoutColumn2.setHeight("min-content");
-        h3.setText("Register a new user");
+        layoutColumn2.setMaxWidth("800px");
+        layoutColumn2.setWidth("100%");
+    // Title for the registration form
+        H3 h3 = new H3("Register a new user");
         h3.setWidth("100%");
+    // Form layout for the registration form 2 columns
+        FormLayout formLayout2Col = new FormLayout();
         formLayout2Col.setWidth("100%");
-        registerButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
-        registerButton.addClickListener(e -> registerUser());
-        layoutRow.addClassName(LumoUtility.Gap.MEDIUM);
-        layoutRow.setWidth("100%");
-        layoutRow.getStyle().set("flex-grow", "1");
-        passwordField.setWidth("min-content");
-        layoutRow.addClassName(Gap.MEDIUM);
-        layoutRow.setWidth("100%");
+    // Form layout for the registration form
+        HorizontalLayout layoutRow = new HorizontalLayout();
+        layoutRow.setJustifyContentMode(JustifyContentMode.CENTER);
         layoutRow.getStyle().set("flex-grow", "1");
         layoutRow.setAlignItems(Alignment.CENTER);
-        layoutRow.setJustifyContentMode(JustifyContentMode.CENTER);
-        registerButton.setWidth("min-content");
+        layoutRow.addClassName(Gap.MEDIUM);
+        layoutRow.setWidth("100%");
+    // register
+        Button registerButton = new Button("Register");
         registerButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        registerButton.addClickListener(e -> registerUser());
+        registerButton.setWidth("min-content");
+    // cancelButton
+        Button cancelButton = new Button("Cancel");
+        cancelButton.addClickListener(e -> clearinput());
         cancelButton.setWidth("min-content");
+    //add components to the layout
         getContent().add(layoutColumn2);
-        layoutColumn2.add(h3);
-        layoutColumn2.add(formLayout2Col);
-        formLayout2Col.add(firstNameField);
-        formLayout2Col.add(lastNameField);
-        formLayout2Col.add(emailField);
-        formLayout2Col.add(passwordField);
-        formLayout2Col.add(userNameField);
-        layoutColumn2.add(layoutRow);
-        layoutRow.add(registerButton);
-        layoutRow.add(cancelButton);
-
+        layoutRow.add(registerButton,cancelButton);
+        layoutColumn2.add(h3,formLayout2Col,layoutRow);
+        formLayout2Col.add(firstNameField,lastNameField,emailField,passwordField,userNameField);
     }
 
+    /** Registers a new user by collecting user input from the form fields,
+     * creating a new User object with the provided data, and saving it to the database.
+     * After saving the user, clears the form fields.
+     */
     private void registerUser() {
         String email = emailField.getValue();
         String password = passwordField.getValue();
-        String firstName = firstNameField.getValue();
-        String lastName = lastNameField.getValue();
         String userName = userNameField.getValue();
-        User user = new User(Role.USER, password,email, lastName,firstName,userName);
+        String lastName = lastNameField.getValue();
+        String firstName = firstNameField.getValue();
+        User user = new User(Role.USER,password,email,lastName,firstName,userName);
         userService.save(user);
-
-        emailField.clear();
-        passwordField.clear();
+        clearinput();
+    }
+    /** Clears the input fields of the registration form.
+     * This method is called when the user clicks the "Cancel" button.
+     * It resets all the form fields to their initial empty state.
+     * @return void - This method does not return any value.
+     */
+    private void clearinput(){
         firstNameField.clear();
         lastNameField.clear();
+        userNameField.clear();
+        passwordField.clear();
+        emailField.clear();
     }
 }
