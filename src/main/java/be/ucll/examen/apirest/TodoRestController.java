@@ -2,11 +2,13 @@ package be.ucll.examen.apirest;
 
 
 import be.ucll.examen.entity.Todo;
+import be.ucll.examen.entity.User;
 import be.ucll.examen.services.TodoService;
 import be.ucll.examen.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,7 +22,8 @@ import java.util.Optional;
 @RequestMapping("/api/user/{id}/todo")
 public class TodoRestController {
 
-
+    @Autowired
+    private JmsTemplate jmsTemplate;
     @Autowired
     private TodoService todoService;
     @Autowired
@@ -73,8 +76,12 @@ public class TodoRestController {
     */
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Todo> createTodo(@PathVariable("id") Long userId, @RequestBody Todo todo) {
-        //Optional<User> getuser= userService.get(userId); // Ensure the TODO item is linked to the user
-        Todo createdTodo = todoService.save(todo, userId);
+        Optional<User> getuser= userService.get(userId); // Ensure the TODO item is linked to the user
+        if (getuser.isEmpty()) {
+            return ResponseEntity.status(400).body(null);
+        }
+        Todo createdTodo = todoService.save(todo, getuser.get().getId());
+        jmsTemplate.convertAndSend("createTodo", createdTodo.toString());
         return ResponseEntity.status(201).body(createdTodo);
     }
 

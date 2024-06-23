@@ -21,8 +21,6 @@ public class SecurityConfiguration extends VaadinWebSecurity {
     /** The logout URL for the application. */
     public static final String LOGOUT_URL = "/logout";
 
-//    @Value("${jwt.auth.secret}")
-//    private String authSecret;
 
     /** Bean method to provide a password encoder.
      * In this case, we are using a NoOpPasswordEncoder for demonstration purposes.
@@ -44,20 +42,6 @@ public class SecurityConfiguration extends VaadinWebSecurity {
         //http.securityMatcher("/app/**");    //comment this out to disable api endpoints and anable login
         super.configure(http);
         setLoginView(http, LoginView.class);
-        //setStatelessAuthentication(http, new SecretKeySpec(Base64.getDecoder().decode(authSecret), JwsAlgorithms.HS256), "be.ucll.examen");
-
     }
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http.csrf().disable()
-//                .authorizeRequests()
-//                .antMatchers("/register", "/login").permitAll()
-//                .anyRequest().authenticated()
-//                .and()
-//                .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-//
-//        setLoginView(http, LoginView.class);
-//    }
-
 
 }

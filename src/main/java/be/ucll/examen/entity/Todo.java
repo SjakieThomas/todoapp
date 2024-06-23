@@ -126,4 +126,21 @@ public class Todo extends AbstractEntity {
         this.todoFor = todoFor;
         this.user = user;
     }
+
+    /** Overrides the toString method to provide a human-readable representation of the Todo object.
+     * @return A string representation of the Todo object.
+     */
+    @Override
+    public String toString() {
+        return "Todo{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", comment='" + comment + '\'' +
+                ", creationDate=" + creationDate +
+                ", dueDate=" + dueDate +
+                ", status=" + status +
+                ", todoFor=" + todoFor +
+                ", user=" + user +
+                '}';
+    }
 }
